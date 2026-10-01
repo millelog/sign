@@ -1,5 +1,5 @@
 
-/* Cascade Online: dark palette for the whole app, appended to Documenso's app CSS by the Dockerfile. */
+/* Cascade Online: dark palette for the whole app, linked on every page by patch.sh. */
 /* `html` outranks the app CSS loaded after this; `.documenso-branded` beats the org brandingColors, which stay light for emails. */
 html.dark:not(.dark-mode-disabled), html.dark:not(.dark-mode-disabled) .documenso-branded {
   --background: 0 0% 11.8%; --foreground: 210 16.7% 97.6%;
