@@ -1,0 +1,51 @@
+# Documenso at sign.cascadeonline.dev (Coolify app on gpu1). Secrets are Coolify env vars.
+services:
+  documenso:
+    image: documenso/documenso:v2.19.0
+    restart: unless-stopped
+    depends_on:
+      database:
+        condition: service_healthy
+    expose:
+      - "3000"
+    environment:
+      - PORT=3000
+      - NEXT_PUBLIC_WEBAPP_URL=${NEXT_PUBLIC_WEBAPP_URL:-https://sign.cascadeonline.dev}
+      - NEXT_PRIVATE_INTERNAL_WEBAPP_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_PRIVATE_ENCRYPTION_KEY=${NEXT_PRIVATE_ENCRYPTION_KEY}
+      - NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY=${NEXT_PRIVATE_ENCRYPTION_SECONDARY_KEY}
+      - NEXT_PRIVATE_DATABASE_URL=postgresql://documenso:${POSTGRES_PASSWORD}@database:5432/documenso
+      - NEXT_PRIVATE_DIRECT_DATABASE_URL=postgresql://documenso:${POSTGRES_PASSWORD}@database:5432/documenso
+      - NEXT_PUBLIC_UPLOAD_TRANSPORT=database
+      - NEXT_PRIVATE_SIGNING_TRANSPORT=local
+      - NEXT_PRIVATE_SIGNING_LOCAL_FILE_CONTENTS=${NEXT_PRIVATE_SIGNING_LOCAL_FILE_CONTENTS}
+      - NEXT_PRIVATE_SIGNING_PASSPHRASE=${NEXT_PRIVATE_SIGNING_PASSPHRASE}
+      # SendGrid SMTP relay; APIKEY_USER must be explicit (an empty string defeats the default)
+      - NEXT_PRIVATE_SMTP_TRANSPORT=smtp-api
+      - NEXT_PRIVATE_SMTP_HOST=smtp.sendgrid.net
+      - NEXT_PRIVATE_SMTP_PORT=587
+      - NEXT_PRIVATE_SMTP_APIKEY_USER=apikey
+      - NEXT_PRIVATE_SMTP_APIKEY=${SENDGRID_API_KEY}
+      - NEXT_PRIVATE_SMTP_FROM_NAME=Cascade Online
+      - NEXT_PRIVATE_SMTP_FROM_ADDRESS=info@cascadeonlinedesign.com
+      - NEXT_PUBLIC_DISABLE_SIGNUP=${NEXT_PUBLIC_DISABLE_SIGNUP:-true}
+      - DOCUMENSO_DISABLE_TELEMETRY=true
+
+  database:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=documenso
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=documenso
+    volumes:
+      - documenso-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U documenso -d documenso"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  documenso-db:
