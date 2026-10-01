@@ -6,5 +6,7 @@ DNS and env setup are documented in `homelab-command` (`hosts/gpu1.md` → "Docu
 
 - Secrets (`NEXTAUTH_SECRET`, encryption keys, `POSTGRES_PASSWORD`, signing cert,
   `SENDGRID_API_KEY`) are Coolify env vars; copies live in `homelab-command/.env`.
-- Upgrade: bump the image tag, push, redeploy. Migrations run on container start.
+- Upgrade: bump the `FROM` tag in `Dockerfile`, push, redeploy. Migrations run on container start.
+- `branding/`: Cascade favicons and the email fallback logo, copied over the stock files by
+  `Dockerfile`. `logo-horizontal.png` is the org branding logo uploaded in Documenso settings.
 - API client: `cascade-online-documents/sign.py`.

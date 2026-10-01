@@ -1,7 +1,7 @@
 # Documenso at sign.cascadeonline.dev (Coolify app on gpu1). Secrets are Coolify env vars.
 services:
   documenso:
-    image: documenso/documenso:v2.19.0
+    build: .
     restart: unless-stopped
     depends_on:
       database:
