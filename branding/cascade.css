@@ -1,7 +1,7 @@
 
 /* Cascade Online: dark palette for the whole app, appended to Documenso's app CSS by the Dockerfile. */
-/* `.documenso-branded` beats the org brandingColors on signing pages; those stay light because emails use them. */
-.dark:not(.dark-mode-disabled), .dark:not(.dark-mode-disabled) .documenso-branded {
+/* `html` outranks the app CSS loaded after this; `.documenso-branded` beats the org brandingColors, which stay light for emails. */
+html.dark:not(.dark-mode-disabled), html.dark:not(.dark-mode-disabled) .documenso-branded {
   --background: 0 0% 11.8%; --foreground: 210 16.7% 97.6%;
   --card: 0 0% 14.9%; --card-foreground: 210 16.7% 97.6%; --card-border: 0 0% 22.7%; --card-border-tint: 42 194 198;
   --popover: 0 0% 14.9%; --popover-foreground: 210 16.7% 97.6%;
@@ -15,6 +15,6 @@
   --radius: .75rem;
 }
 /* Header wordmark: Cascade's light-on-dark lockup in place of the Documenso SVG. */
-[data-testid="app-header-container"] > a > svg {
+[data-testid="app-header-container"] > a:first-child > svg {
   color: transparent; background: url(/static/logo-dark.png) left center / contain no-repeat;
 }
