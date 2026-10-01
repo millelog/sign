@@ -7,6 +7,10 @@ DNS and env setup are documented in `homelab-command` (`hosts/gpu1.md` → "Docu
 - Secrets (`NEXTAUTH_SECRET`, encryption keys, `POSTGRES_PASSWORD`, signing cert,
   `SENDGRID_API_KEY`) are Coolify env vars; copies live in `homelab-command/.env`.
 - Upgrade: bump the `FROM` tag in `Dockerfile`, push, redeploy. Migrations run on container start.
-- `branding/`: Cascade favicons and the email fallback logo, copied over the stock files by
-  `Dockerfile`. `logo-horizontal-dark.png` (light wordmark, for the dark theme) is the org branding logo uploaded in Documenso settings. `Dockerfile` also pins every visitor to dark mode (one sed on the server build; the grep fails the build on an upgrade that moves it).
+- `branding/`: Cascade favicons and logos, copied over the stock files by `Dockerfile`.
+  `patch.sh` then pins every visitor to dark mode, loads `cascade.css` (Cascade dark palette
+  and header wordmark for the whole web app) and points emails at `static/logo.png` (dark
+  wordmark, for white emails). Each patch greps for its result, so an upgrade that moves a
+  target fails the build. `logo-horizontal-dark.png` (light wordmark) is also the org branding
+  logo uploaded in Documenso settings; the org `brandingColors` stay light because emails use them.
 - API client: `cascade-online-documents/sign.py`.
