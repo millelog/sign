@@ -18,3 +18,9 @@ html.dark:not(.dark-mode-disabled), html.dark:not(.dark-mode-disabled) .documens
 [data-testid="app-header-container"] > a:first-child > svg {
   color: transparent; background: url(/static/logo-dark.png) left center / contain no-repeat;
 }
+/* Signing-complete page: Cascade wordmark above the title badge, and no Share (it offers to tweet the document). */
+div.items-center:has(> .rounded-xl.border.bg-transparent)::before {
+  content: ""; display: block; width: 190px; height: 46px; margin-bottom: 2.25rem;
+  background: url(/static/logo-dark.png) center / contain no-repeat;
+}
+.md\:flex-row > button:has(> svg.lucide-sparkles) { display: none; }

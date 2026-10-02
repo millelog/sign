@@ -18,3 +18,11 @@ for f in server/assets/get-email-context-*.js server/hono/packages/lib/utils/tea
   sed -i 's#/api/branding/logo/[a-z]*/${[a-zA-Z]*}#/static/logo.png#g' "$f"
   ! grep -q 'api/branding/logo/' "$f"
 done
+
+# Signer IPs: Traefik overwrites X-Forwarded-For with the Docker gateway, so trust Cloudflare's header first
+# (the origin is reachable only through the tunnel, and Cloudflare always sets it).
+cf='if (req.headers.get("cf-connecting-ip")) return req.headers.get("cf-connecting-ip").trim();'
+sed -i "s#const getIpAddress = (req) => {#& $cf#" "$srv"
+sed -i "s#const getIpAddress = req => {#& $cf#" server/hono/packages/lib/universal/get-ip-address.js
+grep -q 'getIpAddress = (req) => { if (req.headers.get("cf-connecting-ip"))' "$srv"
+grep -q 'getIpAddress = req => { if (req.headers.get("cf-connecting-ip"))' server/hono/packages/lib/universal/get-ip-address.js
